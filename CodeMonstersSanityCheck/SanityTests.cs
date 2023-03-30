@@ -12,7 +12,6 @@ namespace CodeMonstersSanityCheck
     [Collection("SanityTests")]
     public class SanityTests
     {
-
         [Theory]
         [InlineData(Username, Password, HttpStatusCode.OK)]
         [InlineData(WrongUsername, WrongPassword, HttpStatusCode.Unauthorized)]
@@ -20,7 +19,6 @@ namespace CodeMonstersSanityCheck
         [InlineData(WrongUsername, Password, HttpStatusCode.Unauthorized)]
         public async Task TransactionReturnsProperStatusCode(string username, string password, HttpStatusCode statusCode)
         {
-
             var options = new RestClientOptions("http://localhost:3001")
             {
                 Authenticator = new HttpBasicAuthenticator(username, password),
@@ -30,7 +28,6 @@ namespace CodeMonstersSanityCheck
             var request = new RestRequest("/payment_transactions", Method.Post);
             request.AddJsonBody(
                 new Payment
-
                 {
                     payment_transaction = new Payment_transaction()
                     {
@@ -48,20 +45,18 @@ namespace CodeMonstersSanityCheck
             var response = await client.ExecuteAsync(request);
             Assert.Equal(statusCode, response.StatusCode);
         }
+
         [Fact]
         public async Task VoidTransactionIsSuccessuful()
         {
             var options = new RestClientOptions("http://localhost:3001")
             {
                 Authenticator = new HttpBasicAuthenticator(Username, Password),
-
-
             };
             var client = new RestClient(options);
             var request = new RestRequest("/payment_transactions", Method.Post);
             request.AddJsonBody(
                 new Payment
-
                 {
                     payment_transaction = new Payment_transaction()
                     {
@@ -80,7 +75,6 @@ namespace CodeMonstersSanityCheck
             var voidRequest = new RestRequest("/payment_transactions", Method.Post);
             voidRequest.AddJsonBody(
                 new Payment
-
                 {
                     payment_transaction = new Payment_transaction()
                     {
@@ -93,7 +87,6 @@ namespace CodeMonstersSanityCheck
             Assert.True(voidResponse.IsSuccessful);
         }
 
-        
         [Theory]
         [InlineData("6fce1269a42c6c205a5cece92a4468e0")]
         [InlineData("6fce1269a42c6c205a5cece92a443333")]

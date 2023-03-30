@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CodeMonstersSanityCheck.Models.Response
 {
-    internal class TransactionResponse
+    public class TransactionResponse
     {
         public string unique_id { get; set; }
         public string status { get; set; }
