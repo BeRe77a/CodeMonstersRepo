@@ -14,9 +14,9 @@ namespace CodeMonstersSanityCheck
     {
         [Theory]
         [InlineData(Username, Password, HttpStatusCode.OK)]
-        [InlineData(WrongUsername, WrongPassword, HttpStatusCode.Unauthorized)]
-        [InlineData(Username, WrongPassword, HttpStatusCode.Unauthorized)]
-        [InlineData(WrongUsername, Password, HttpStatusCode.Unauthorized)]
+        [InlineData("WrongUsername", "WrongPassword", HttpStatusCode.Unauthorized)]
+        [InlineData(Username, "WrongPassword", HttpStatusCode.Unauthorized)]
+        [InlineData("WrongUsername", Password, HttpStatusCode.Unauthorized)]
         public async Task TransactionReturnsProperStatusCode(string username, string password, HttpStatusCode statusCode)
         {
             var options = new RestClientOptions("http://localhost:3001")
@@ -43,6 +43,7 @@ namespace CodeMonstersSanityCheck
                     }
                 });
             var response = await client.ExecuteAsync(request);
+
             Assert.Equal(statusCode, response.StatusCode);
         }
 
@@ -83,7 +84,7 @@ namespace CodeMonstersSanityCheck
                     }
                 });
             var voidResponse = await client.PostAsync(voidRequest);
-            ;
+
             Assert.True(voidResponse.IsSuccessful);
         }
 
@@ -99,7 +100,6 @@ namespace CodeMonstersSanityCheck
 
             };
             var client = new RestClient(options);
-
             var request = new RestRequest("/payment_transactions", Method.Post);
             request.AddJsonBody(
                 new Payment
@@ -112,9 +112,8 @@ namespace CodeMonstersSanityCheck
                     }
                 });
             var response = await client.ExecuteAsync(request);
-            ;
+            
             Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);
-
         }
 
 

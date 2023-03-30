@@ -10,9 +10,6 @@ namespace CodeMonstersSanityCheck.Credentials
     {
         public  const string Username = "codemonster";
         public  const string Password = "my5ecret-key2o2o";
-        public  const string WrongUsername = "wrongUsername";
-        public  const string WrongPassword = "wrongPassword";
-
     }
 
 }
