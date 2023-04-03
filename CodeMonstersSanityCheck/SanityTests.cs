@@ -22,7 +22,6 @@ namespace CodeMonstersSanityCheck
             var options = new RestClientOptions("http://localhost:3001")
             {
                 Authenticator = new HttpBasicAuthenticator(username, password),
-
             };
             var client = new RestClient(options);
             var request = new RestRequest("/payment_transactions", Method.Post);
@@ -149,8 +148,6 @@ namespace CodeMonstersSanityCheck
             var options = new RestClientOptions("http://localhost:3001")
             {
                 Authenticator = new HttpBasicAuthenticator(Username, Password),
-
-
             };
             var client = new RestClient(options);
             var request = new RestRequest("/payment_transactions", Method.Post);
