@@ -83,15 +83,68 @@ namespace CodeMonstersSanityCheck
                         transaction_type = "void"
                     }
                 });
-            var voidResponse = await client.PostAsync(voidRequest);
+             var voidResponse = await client.ExecuteAsync(voidRequest);
 
+            
             Assert.True(voidResponse.IsSuccessful);
         }
 
-        [Theory]
-        [InlineData("6fce1269a42c6c205a5cece92a4468e0")]
-        [InlineData("6fce1269a42c6c205a5cece92a443333")]
-        public async Task InvalidReferencVoidTransactionsReturnsProperStatusCode(string refId)
+        [Fact]
+        public async Task ExitingReferenceIdVoidTransactionReturns()
+        {
+            var options = new RestClientOptions("http://localhost:3001")
+            {
+                Authenticator = new HttpBasicAuthenticator(Username, Password),
+            };
+            var client = new RestClient(options);
+            var request = new RestRequest("/payment_transactions", Method.Post);
+            request.AddJsonBody(
+                new Payment
+                {
+                    payment_transaction = new Payment_transaction()
+                    {
+                        card_number = "4200000000000000",
+                        cvv = "123",
+                        expiration_date = "06/2019",
+                        amount = 500,
+                        usage = "Coffeemaker",
+                        transaction_type = "sale",
+                        card_holder = "Panda Panda",
+                        email = "panda@example.com",
+                        address = "Panda Street, China"
+                    }
+                });
+            var response = await client.PostAsync<TransactionResponse>(request);
+            var voidRequest = new RestRequest("/payment_transactions", Method.Post);
+            voidRequest.AddJsonBody(
+                new Payment
+                {
+                    payment_transaction = new Payment_transaction()
+                    {
+                        reference_id = response.unique_id,
+                        transaction_type = "void"
+                    }
+                });
+            var voidResponse = await client.PostAsync<VoidTransactionResponse>(voidRequest);
+            var existingVoidRequest = new RestRequest("/payment_transactions", Method.Post);
+            existingVoidRequest.AddJsonBody(
+                new Payment
+                {
+                    payment_transaction = new Payment_transaction()
+                    {
+                        reference_id = voidResponse.unique_id,
+                        transaction_type = "void"
+                    }
+                });
+            var existingVoidResponse = await client.ExecuteAsync(existingVoidRequest);
+
+            Assert.Equal(HttpStatusCode.UnprocessableEntity, existingVoidResponse.StatusCode);
+        }
+
+
+        [Fact]
+        
+        public async Task InvalidReferencVoidTransactionsReturnsProperStatusCode()
         {
             var options = new RestClientOptions("http://localhost:3001")
             {
@@ -107,7 +160,7 @@ namespace CodeMonstersSanityCheck
                 {
                     payment_transaction = new Payment_transaction()
                     {
-                        reference_id = "6fce1269a42c6c205a5cece92a4468e0",
+                        reference_id = Guid.NewGuid().ToString(),
                         transaction_type = "void"
                     }
                 });
