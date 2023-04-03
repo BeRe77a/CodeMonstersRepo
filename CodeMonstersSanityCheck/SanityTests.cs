@@ -90,7 +90,7 @@ namespace CodeMonstersSanityCheck
         }
 
         [Fact]
-        public async Task ExitingReferenceIdVoidTransactionReturns()
+        public async Task ExitingReferenceIdVoidTransactionReturnsProperStatusCode()
         {
             var options = new RestClientOptions("http://localhost:3001")
             {
