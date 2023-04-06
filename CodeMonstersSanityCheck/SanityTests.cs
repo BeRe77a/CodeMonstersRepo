@@ -84,12 +84,11 @@ namespace CodeMonstersSanityCheck
                 });
              var voidResponse = await client.ExecuteAsync(voidRequest);
 
-            
             Assert.True(voidResponse.IsSuccessful);
         }
 
         [Fact]
-        public async Task ExitingReferenceIdVoidTransactionReturnsProperStatusCode()
+        public async Task ExistingReferenceIdVoidTransactionReturnsProperStatusCode()
         {
             var options = new RestClientOptions("http://localhost:3001")
             {
@@ -143,7 +142,7 @@ namespace CodeMonstersSanityCheck
 
         [Fact]
         
-        public async Task InvalidReferencVoidTransactionsReturnsProperStatusCode()
+        public async Task InvalidReferenceVoidTransactionsReturnsProperStatusCode()
         {
             var options = new RestClientOptions("http://localhost:3001")
             {
